@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "express": "^5.2.1",
+    "node": "^25.7.0"
+  },
+  "name": "projekt4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "show_node.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ozywek/projekt4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "homepage": "https://github.com/Ozywek/projekt4#readme"
+}
