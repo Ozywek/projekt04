@@ -1,13 +1,22 @@
-import { createServer } from 'node:http';
+import express from 'express';
 
-const server = createServer(function (req, res) {
-  console.log(req);
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World!');
-})
 
-server.listen(8000, "localhost", ()=>{
-  console.log("sta");
+
+
+const app = express();
+
+app.set('view engine', 'ejs');
+
+
+
+app.get("/", (req, res) => {
+  res.render("index", {
+    title: "TEST",
+    theme: "dark"
+  });
 });
 
 
+app.listen(3000, () => {
+  console.log('Serwer działa');
+});
