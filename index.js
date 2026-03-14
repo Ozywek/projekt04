@@ -34,12 +34,12 @@ app.get("/article_list", (req, res) => {
 
 
 
-app.post("/article_list/3/new", (req, res) => {
+app.post("/article_list", (req, res) => {
 
   console.log("Bitwa:", req.body.bitwa);
   console.log("Data:", req.body.data);
 
-  res.send("oki");
+  res.redirect("/");
 });
 
 app.listen(3000, () => {
