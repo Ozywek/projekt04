@@ -36,8 +36,8 @@ app.get("/article_list", (req, res) => {
 
 app.post("/article_list/3/new", (req, res) => {
 
-  console.log("Front:", req.body.front);
-  console.log("Back:", req.body.back);
+  console.log("Bitwa:", req.body.bitwa);
+  console.log("Data:", req.body.data);
 
   res.send("oki");
 });
