@@ -1,5 +1,16 @@
-<form method="POST" action="/article_list">
-  <input name="bitwa">
-  <input name="data">
-  <button type="submit">Wyślij</button>
+<h1>Dodaj nową bitwę</h1>
+
+<form method="POST" action="/battle/new">
+
+  <label>Nazwa bitwy:</label><br>
+  <input type="text" name="name" required><br><br>
+
+  <label>Rok:</label><br>
+  <input type="number" name="year" required><br><br>
+
+  <label>Opis:</label><br>
+  <textarea name="description" required></textarea><br><br>
+
+  <button type="submit">Dodaj bitwę</button>
+
 </form>

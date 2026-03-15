@@ -3,9 +3,11 @@
 
 
 <h1>Encyklopedia Bitew</h1>
-<p><a href="/article_list">Lista Artykułów</a></p>
 
-<h2>Najnowsze Artykuły:</h2>
+<h2>Artykuły:</h2>
+        <% categories.forEach(function(category){ %>
+        <li> <a href="<%= category.id %>"><%= category.name %></a> </li>
+        <% }) %>
 
-
+<%- include("forms/new_article.ejs") %>
 <%- include("foot.partial.ejs") %>

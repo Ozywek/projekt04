@@ -1,11 +1,12 @@
 import express from 'express';
+import { validateHeaderValue } from 'node:http';  
+import battles from "./models/battles.js";
 
 const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 
 
 function log_request(req, res, next) {
@@ -18,28 +19,43 @@ app.use(log_request);
 app.get("/main_page", (req, res) => {
   res.render("main_page", {
     title: "TEST",
-    theme: "dark"
-
+    theme: "dark",
+      categories: battles.getBattleSummaries(),
   });
 });
 
-app.get("/article_list", (req, res) => {
-  res.render("article_list", {
-    title: "Artykuły",
-    lorem: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sagittis mi massa. Sed hendrerit mi non elit auctor, at posuere purus convallis. Nam tristique at metus in iaculis. Pellentesque hendrerit facilisis gravida. Sed posuere fermentum arcu sit amet mattis. Cras dignissim erat neque, et vestibulum tellus imperdiet scelerisque. Pellentesque turpis libero, vulputate in varius in, lacinia nec nibh. In elit felis, tempus quis efficitur vel, lacinia vel massa. Quisque dignissim consequat semper",
-    theme: "dark"
-
-  });
+app.get("/:battle_id", (req, res) => {
+  const battle = battles.getBattle(req.params.battle_id);
+  if (battle) {
+    res.render("category", {
+      title: battle.name,
+      year: battle.year,
+      description: battle.description
+    });
+  } else {
+    res.status(404).send("Battle not found");
+  }
 });
 
 
+app.get("/battle/new", (req, res) => {
+  res.render("new_battle", {
+    title: "Nowa bitwa",
+    theme: "dark"
+  });
+});
 
-app.post("/article_list", (req, res) => {
+app.post("/battle/new", (req, res) => {
 
-  console.log("Bitwa:", req.body.bitwa);
-  console.log("Data:", req.body.data);
+  const id = "bitwa" + Date.now();
 
-  res.redirect("/");
+  battles.addBattle(id, {
+    name: req.body.name,
+    year: req.body.year,
+    description: req.body.description
+  });
+
+  res.redirect("/main_page");
 });
 
 app.listen(3000, () => {
