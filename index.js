@@ -47,7 +47,8 @@ app.get("/battle/new", (req, res) => {
 
 app.post("/battle/new", (req, res) => {
 
-  const id = "bitwa" + Date.now();
+  const id = req.body.name.replace(/ /g,"_");
+  //  "bitwa" + Date.now();
 
   battles.addBattle(id, {
     name: req.body.name,
