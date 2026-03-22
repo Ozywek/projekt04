@@ -8,33 +8,22 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+app.use(log_request);
 
 function log_request(req, res, next) {
   console.log(`Request ${req.method} ${req.path}`);
   next();
 }
-app.use(log_request);
 
 
 app.get("/main_page", (req, res) => {
   res.render("main_page", {
     title: "TEST",
     theme: "dark",
-      categories: battles.getBattleSummaries(),
+    battles: battles.Get_All_Battles(),
   });
-});
-
-app.get("/:battle_id", (req, res) => {
-  const battle = battles.getBattle(req.params.battle_id);
-  if (battle) {
-    res.render("category", {
-      title: battle.name,
-      year: battle.year,
-      description: battle.description
-    });
-  } else {
-    res.status(404).send("Battle not found");
-  }
+    console.log(battles.Get_All_Battles());
+    
 });
 
 
@@ -45,17 +34,30 @@ app.get("/battle/new", (req, res) => {
   });
 });
 
+app.get("/battle/:id", (req, res) => {
+  const id = req.params.id;
+  const battle = battles.Get_Battle_By_Id(id);
+  if (battle) {
+    res.render("article.ejs", {
+      title: "Nowy artykuł",
+      theme: "dark",
+      battle: battle
+    });
+  } else {
+    res.status(404).send("Battle not found");
+  }
+});
+
+
+
+
 app.post("/battle/new", (req, res) => {
 
-  const id = req.body.name.replace(/ /g,"_");
-  //  "bitwa" + Date.now();
-
-  battles.addBattle(id, {
-    name: req.body.name,
-    year: req.body.year,
-    description: req.body.description
-  });
-
+battles.Insert_Battle(
+  req.body.name,
+  req.body.year,
+  req.body.description  
+);
   res.redirect("/main_page");
 });
 

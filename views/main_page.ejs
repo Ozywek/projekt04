@@ -5,9 +5,12 @@
 <h1>Encyklopedia Bitew</h1>
 
 <h2>Artykuły:</h2>
-        <% categories.forEach(function(category){ %>
-        <li> <a href="<%= category.id %>"><%= category.name %></a> </li>
-        <% }) %>
-
+<ul>
+  <% battles.forEach(function(battle){ %>
+    <li>
+      <a href="/battle/<%= battle.id %>"><%= battle.name %></a>
+    </li>
+  <% }) %>
+</ul>
 <%- include("forms/new_article.ejs") %>
 <%- include("foot.partial.ejs") %>

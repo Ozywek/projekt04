@@ -1,0 +1,9 @@
+<h1>Edytuj bitwę</h1>
+
+<form method="POST" action="/battle/<%= battle.id %>/edit">
+  <input type="text" name="name" value="<%= battle.name %>"> <br>
+  <input type="number" name="year" value="<%= battle.year %>"> <br>
+  <textarea name="description"><%= battle.description %></textarea> <br>
+
+  <button>Zapisz</button>
+</form>
