@@ -35,6 +35,14 @@ let db_ops = {
   get_battle_by_id: db.prepare(
     "SELECT id, name, year, description FROM battles WHERE id = ?;"
   ),
+  
+  delete_battle_by_id: db.prepare(
+    "DELETE FROM battles WHERE id = ?;"
+  )
+}
+
+export function Update_Battle_By_Id(id, name, year, description) {
+  return db_ops.get_update_battle_by_id.run(name, year, description, id);
 }
 
 export function Insert_Battle(name, year, description) {
@@ -54,9 +62,15 @@ export function Get_Battles_By_Year(year) {
   return db_ops.get_battles_by_year.get(year);
 }
 
+export function Delete_Battle_By_Id(id) {
+  return db_ops.delete_battle_by_id.run(id);
+}
+
 export default {
   Insert_Battle,
   Get_All_Battles,
   Get_Battle_By_Id,
-  Get_Battles_By_Year
+  Get_Battles_By_Year,
+  Update_Battle_By_Id,
+  Delete_Battle_By_Id
 };

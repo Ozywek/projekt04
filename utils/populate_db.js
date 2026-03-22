@@ -14,10 +14,6 @@ const card_categories = {
   },
 };
 
-
-
-
-
 console.log("Populating db...");
 
 Object.entries(card_categories).forEach(([id, data]) => { 

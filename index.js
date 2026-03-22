@@ -49,8 +49,25 @@ app.get("/battle/:id", (req, res) => {
 });
 
 
+//edycja
+app.post("/battle/:id/edit", (req, res) => {
+  const id = req.params.id;
+  battles.Update_Battle_By_Id(
+    id,
+    req.body.name,
+    req.body.year,
+    req.body.description
+  );
+  res.redirect(`/battle/${id}`);
+});
+
+app.listen(3000, () => {
+  console.log('Serwer działa');
+});
 
 
+
+//nowy
 app.post("/battle/new", (req, res) => {
 
 battles.Insert_Battle(
@@ -58,6 +75,13 @@ battles.Insert_Battle(
   req.body.year,
   req.body.description  
 );
+  res.redirect("/main_page");
+});
+
+//usuń
+app.post("/battle/:id/delete", (req, res) => {
+  const id = req.params.id;
+  battles.Delete_Battle_By_Id(id);
   res.redirect("/main_page");
 });
 
