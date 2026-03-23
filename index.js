@@ -1,5 +1,7 @@
 import express from 'express';
 import { validateHeaderValue } from 'node:http';  
+import cookieParser from "cookie-parser";
+import settings from "./models/settings.js";
 import battles from "./models/battles.js";
 
 const app = express();
@@ -7,6 +9,52 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(cookieParser());
+
+
+
+
+function settingsLocals(req, res, next) {
+  res.locals.app = settings.getSettings(req);
+  res.locals.page = req.path;
+  next();
+}
+app.use(settingsLocals);
+
+const settingsRouter = express.Router();
+settingsRouter.use("/toggle-theme", settings.themeToggle);
+
+
+settingsRouter.use("/accept-cookies", settings.acceptCookies);
+settingsRouter.use("/decline-cookies", settings.declineCookies);
+settingsRouter.use("/manage-cookies", settings.manageCookies);
+app.use("/settings", settingsRouter);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.use(log_request);
 
@@ -16,10 +64,9 @@ function log_request(req, res, next) {
 }
 
 
-app.get("/main_page", (req, res) => {
+app.get("/", (req, res) => {
   res.render("main_page", {
     title: "TEST",
-    theme: "dark",
     battles: battles.Get_All_Battles(),
   });
     console.log(battles.Get_All_Battles());
@@ -27,20 +74,18 @@ app.get("/main_page", (req, res) => {
 });
 
 
-app.get("/battle/new", (req, res) => {
+app.get("/new", (req, res) => {
   res.render("new_battle", {
     title: "Nowa bitwa",
-    theme: "dark"
   });
 });
 
-app.get("/battle/:id", (req, res) => {
+app.get("/:id", (req, res) => {
   const id = req.params.id;
   const battle = battles.Get_Battle_By_Id(id);
   if (battle) {
     res.render("article.ejs", {
       title: "Nowy artykuł",
-      theme: "dark",
       battle: battle
     });
   } else {
@@ -50,7 +95,7 @@ app.get("/battle/:id", (req, res) => {
 
 
 //edycja
-app.post("/battle/:id/edit", (req, res) => {
+app.post("/:id/edit", (req, res) => {
   const id = req.params.id;
   battles.Update_Battle_By_Id(
     id,
@@ -58,7 +103,7 @@ app.post("/battle/:id/edit", (req, res) => {
     req.body.year,
     req.body.description
   );
-  res.redirect(`/battle/${id}`);
+  res.redirect(`/${id}`);
 });
 
 app.listen(3000, () => {
@@ -68,21 +113,21 @@ app.listen(3000, () => {
 
 
 //nowy
-app.post("/battle/new", (req, res) => {
+app.post("/new", (req, res) => {
 
 battles.Insert_Battle(
   req.body.name,
   req.body.year,
   req.body.description  
 );
-  res.redirect("/main_page");
+  res.redirect("/");
 });
 
 //usuń
-app.post("/battle/:id/delete", (req, res) => {
+app.post("/:id/delete", (req, res) => {
   const id = req.params.id;
   battles.Delete_Battle_By_Id(id);
-  res.redirect("/main_page");
+  res.redirect("/");
 });
 
 app.listen(3000, () => {
