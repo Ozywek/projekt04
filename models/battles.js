@@ -1,6 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 
-const db_path = "./models/battles.db";
+const db_path = "./battles.db";
 const db = new DatabaseSync(db_path, { verbose: console.log });
 
 console.log("Connected to database at " + db_path);

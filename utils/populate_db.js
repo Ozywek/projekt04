@@ -1,6 +1,5 @@
 import battles from "../models/battles.js";
 
-
 const card_categories = {
   "bitwa1": {
     name: "Bitwa pod Azincourt",
