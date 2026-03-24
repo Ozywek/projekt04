@@ -64,13 +64,11 @@ function normalizeText(text) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
 }
-
 app.get("/", (req, res) => {
   res.render("main_page", {
     title: "TEST",
-    battles: battles.Get_All_Battles(),
+    battles: battles.Get_All_Battles_Limit(),
   });
-    console.log(battles.Get_All_Battles());
     
 });
 
@@ -88,9 +86,8 @@ app.get("/battle/:id", (req, res) => {
   }
 });
 
- 
 app.get('/search', (req, res) => {
-  let query = req.query.q;
+  let query = req.query.q || '';
   query = normalizeText(query);
 
   let all_battles = battles.Get_All_Battles();
@@ -99,6 +96,7 @@ app.get('/search', (req, res) => {
     normalizeText(battle.name).includes(query)
   );
 
+  console.log("Szukanie: ", query);
   console.log("Rezultaty ", results);
 
   res.render("search_results", {

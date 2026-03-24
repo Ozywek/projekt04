@@ -32,6 +32,9 @@ let db_ops = {
     "UPDATE battles SET name = ?, year = ?, description = ? WHERE id = ? RETURNING id, name, year, description;"
   ),
 
+  get_all_battles_limit: db.prepare(
+    "SELECT id, name, year, description FROM battles ORDER BY id DESC LIMIT 3;"
+  ),
   get_battle_by_id: db.prepare(
     "SELECT id, name, year, description FROM battles WHERE id = ?;"
   ),
@@ -58,6 +61,9 @@ export function Get_Battle_By_Id(id) {
   return db_ops.get_battle_by_id.get(id);
 }
 
+export function Get_All_Battles_Limit() {
+  return db_ops.get_all_battles_limit.all();
+}
  
 export function Get_Battles_By_Name(name) {
   return db_ops.get_battles_by_name.all(name);
@@ -71,6 +77,7 @@ export default {
   Insert_Battle,
   Get_All_Battles,
   Get_Battle_By_Id,
+  Get_All_Battles_Limit,
   Get_Battles_By_Name,
   Update_Battle_By_Id,
   Delete_Battle_By_Id

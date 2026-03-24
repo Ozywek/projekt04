@@ -1,6 +1,7 @@
 "use strict";
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
+const ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
 const THEME_COOKIE = "fisz-theme";
 const CONSENT_COOKIE = "fisz-consent";
 
