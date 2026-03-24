@@ -11,7 +11,7 @@ export function themeToggle(req, res) {
   } else {
     theme = "dark";
   }
-  res.cookie(THEME_COOKIE, theme);
+  res.cookie(THEME_COOKIE, theme, { maxAge: ONE_MONTH, secure: true});
 
   var next = req.query.next || "/";
   res.redirect(next);

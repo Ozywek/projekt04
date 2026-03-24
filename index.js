@@ -51,11 +51,6 @@ app.use("/settings", settingsRouter);
 
 
 
-
-
-
-
-
 app.use(log_request);
 
 function log_request(req, res, next) {
@@ -63,6 +58,12 @@ function log_request(req, res, next) {
   next();
 }
 
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
 
 app.get("/", (req, res) => {
   res.render("main_page", {
@@ -74,13 +75,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.get("/new", (req, res) => {
-  res.render("new_battle", {
-    title: "Nowa bitwa",
-  });
-});
-
-app.get("/:id", (req, res) => {
+app.get("/battle/:id", (req, res) => {
   const id = req.params.id;
   const battle = battles.Get_Battle_By_Id(id);
   if (battle) {
@@ -93,9 +88,28 @@ app.get("/:id", (req, res) => {
   }
 });
 
+ 
+app.get('/search', (req, res) => {
+  let query = req.query.q;
+  query = normalizeText(query);
+
+  let all_battles = battles.Get_All_Battles();
+
+  let results = all_battles.filter(battle => 
+    normalizeText(battle.name).includes(query)
+  );
+
+  console.log("Rezultaty ", results);
+
+  res.render("search_results", {
+    title: "Wyniki wyszukiwania",
+    results: results
+  });
+});
+
 
 //edycja
-app.post("/:id/edit", (req, res) => {
+app.post("/battle/:id/edit", (req, res) => {
   const id = req.params.id;
   battles.Update_Battle_By_Id(
     id,
@@ -103,17 +117,13 @@ app.post("/:id/edit", (req, res) => {
     req.body.year,
     req.body.description
   );
-  res.redirect(`/${id}`);
-});
-
-app.listen(3000, () => {
-  console.log('Serwer działa');
+  res.redirect(`/battle/${id}`);
 });
 
 
 
 //nowy
-app.post("/new", (req, res) => {
+app.post("/battle/new", (req, res) => {
 
 battles.Insert_Battle(
   req.body.name,
@@ -124,7 +134,7 @@ battles.Insert_Battle(
 });
 
 //usuń
-app.post("/:id/delete", (req, res) => {
+app.post("/battle/:id/delete", (req, res) => {
   const id = req.params.id;
   battles.Delete_Battle_By_Id(id);
   res.redirect("/");

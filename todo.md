@@ -1,1 +1,1 @@
-sprawdzanie bledow
+POPULATE DB NIE DZIALA!!!
