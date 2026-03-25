@@ -40,7 +40,7 @@ html {
 }
 
 html[data-theme='dark'] {
-    --backdrop: rgb(0, 0, 0);
+    --backdrop: rgb(90, 90, 90);
     --background: #000000;
     --text-color-normal: #ffffff;
     --text-color-link: #77f;
