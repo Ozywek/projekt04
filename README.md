@@ -1,4 +1,4 @@
-# projekt4
+# projekt04
 npm init -y
 npm install
 chmod a+x utils/generate_env.sh
