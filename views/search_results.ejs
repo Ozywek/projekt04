@@ -2,7 +2,7 @@
 <%- include("forms/search_form.ejs") %>
 
 
-
+<div id="search-results">
 <% if (results.length === 0) { %>
   <p>Brak wyników</p>
 <% } else { %>
@@ -12,3 +12,4 @@
     <% }) %>
   </ul>
 <% } %>
+</div>

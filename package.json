@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "argon2": "^0.44.0",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
     "node": "^25.7.0"
@@ -17,5 +19,8 @@
   "author": "",
   "license": "ISC",
   "type": "module",
-  "homepage": "https://github.com/Ozywek/projekt4#readme"
+  "homepage": "https://github.com/Ozywek/projekt4#readme",
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
 }

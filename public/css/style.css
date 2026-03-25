@@ -46,3 +46,9 @@ html[data-theme='dark'] {
     --text-color-link: #77f;
 }
 
+#main-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}

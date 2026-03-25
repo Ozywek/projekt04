@@ -1,0 +1,10 @@
+<div id = "recent-articles">
+<h2>Najnowsze Artykuły:</h2>
+<ul>
+  <% battles.forEach(function(battle){ %>
+    <li>
+      <a href="battle/<%= battle.id %>"><%= battle.name %></a>
+    </li>
+  <% }) %>
+</ul>
+</div>

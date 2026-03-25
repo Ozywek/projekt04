@@ -50,6 +50,7 @@ export function getSettings(req) {
   return settings;
 }
 
+
 export default {
   themeToggle,
   acceptCookies,

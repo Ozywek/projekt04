@@ -1,8 +1,14 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from 'express';
 import { validateHeaderValue } from 'node:http';  
 import cookieParser from "cookie-parser";
 import settings from "./models/settings.js";
 import battles from "./models/battles.js";
+import session from "./models/session.js";
+import auth from "./controller/auth.js";
+
+
 
 const app = express();
 
@@ -17,10 +23,11 @@ app.use(cookieParser());
 function settingsLocals(req, res, next) {
   res.locals.app = settings.getSettings(req);
   res.locals.page = req.path;
+  res.locals.user = req.user || null;
   next();
 }
 app.use(settingsLocals);
-
+app.use(session.sessionHandler);
 const settingsRouter = express.Router();
 settingsRouter.use("/toggle-theme", settings.themeToggle);
 
@@ -30,6 +37,13 @@ settingsRouter.use("/decline-cookies", settings.declineCookies);
 settingsRouter.use("/manage-cookies", settings.manageCookies);
 app.use("/settings", settingsRouter);
 
+const authRouter = express.Router();
+authRouter.get("/signup", auth.signup_get);
+authRouter.post("/signup", auth.signup_post);
+authRouter.get("/login", auth.login_get);
+authRouter.post("/login", auth.login_post);
+authRouter.get("/logout", auth.logout);
+app.use("/auth", authRouter);
 
 
 
@@ -47,16 +61,12 @@ app.use("/settings", settingsRouter);
 
 
 
-
-
-
-
-app.use(log_request);
 
 function log_request(req, res, next) {
   console.log(`Request ${req.method} ${req.path}`);
   next();
 }
+app.use(log_request);
 
 function normalizeText(text) {
   return text
@@ -66,7 +76,7 @@ function normalizeText(text) {
 }
 app.get("/", (req, res) => {
   res.render("main_page", {
-    title: "TEST",
+    title: "Encyklopedia Bitew",
     battles: battles.Get_All_Battles_Limit(),
   });
     
@@ -78,7 +88,7 @@ app.get("/battle/:id", (req, res) => {
   const battle = battles.Get_Battle_By_Id(id);
   if (battle) {
     res.render("article.ejs", {
-      title: "Nowy artykuł",
+      title: battle.name,
       battle: battle
     });
   } else {
