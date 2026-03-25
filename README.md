@@ -7,4 +7,4 @@ npm install argon2
 //node --watch --env-file .env ./index.js
 
 node populate_db.js
-node index.js
+npm run dev

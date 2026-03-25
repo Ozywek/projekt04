@@ -19,6 +19,12 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+    "scripts": {
+    "dev": "node --watch --env-file .env ./index.js",
+    "populate_db": "node utils/populate_db.js",
+    "generate_env": "./utils/generate_env.sh > .env",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "homepage": "https://github.com/Ozywek/projekt4#readme",
   "devDependencies": {
     "cross-env": "^10.1.0"
