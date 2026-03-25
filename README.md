@@ -4,7 +4,7 @@ npm init --yes
 npm install express
 npm install cookie-parser
 npm install argon2
-//node --watch --env-file .env ./index.js
-
-node populate_db.js
+chmod a+x utils/generate_env.sh
+utils/generate_env.sh > .env
+node utils/populate_db.js
 npm run dev

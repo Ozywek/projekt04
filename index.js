@@ -118,7 +118,7 @@ app.get('/search', (req, res) => {
 
 
 //edycja
-app.post("/battle/:id/edit", (req, res) => {
+app.post("/battle/:id/edit", auth.login_required, (req, res) => {
   const id = req.params.id;
   battles.Update_Battle_By_Id(
     id,
@@ -132,7 +132,7 @@ app.post("/battle/:id/edit", (req, res) => {
 
 
 //nowy
-app.post("/battle/new", (req, res) => {
+app.post("/battle/new", auth.login_required, (req, res) => {
 
 battles.Insert_Battle(
   req.body.name,
@@ -143,7 +143,7 @@ battles.Insert_Battle(
 });
 
 //usuń
-app.post("/battle/:id/delete", (req, res) => {
+app.post("/battle/:id/delete", auth.login_required, (req, res) => {
   const id = req.params.id;
   battles.Delete_Battle_By_Id(id);
   res.redirect("/");

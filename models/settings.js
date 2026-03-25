@@ -2,8 +2,8 @@
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
 const ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
-const THEME_COOKIE = "fisz-theme";
-const CONSENT_COOKIE = "fisz-consent";
+const THEME_COOKIE = "theme_cookie";
+const CONSENT_COOKIE = "consent_cookie";
 
 export function themeToggle(req, res) {
   var theme = req.cookies[THEME_COOKIE];
