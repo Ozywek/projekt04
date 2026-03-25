@@ -13,7 +13,7 @@ const HASH_PARAMS = {
   secret: Buffer.from(PEPPER, "hex"),
 };
 
-const db_path = "./db.sqlite";
+const db_path = "./battles.db";
 const db = new DatabaseSync(db_path);
 
 db.exec(`

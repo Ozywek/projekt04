@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+
 import express from 'express';
 import { validateHeaderValue } from 'node:http';  
 import cookieParser from "cookie-parser";
@@ -28,6 +27,8 @@ function settingsLocals(req, res, next) {
 }
 app.use(settingsLocals);
 app.use(session.sessionHandler);
+// app.use(settings.settingsHandler);
+
 const settingsRouter = express.Router();
 settingsRouter.use("/toggle-theme", settings.themeToggle);
 
