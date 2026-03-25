@@ -1,38 +1,7 @@
-.navbar {
-  width: 100%;
-  background-color: #555;
-  overflow: auto;
-}
-
-.navbar a {
-  float: left;
-  text-align: center;
-  padding: 12px;
-  color: white;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.navbar a:hover {
-  background-color: #000;
-}
-
-.active {
-  background-color: #04AA6D;
-}
-
-@media screen and (max-width: 500px) {
-  .navbar a {
-    float: none;
-    display: block;
-  }
-}
-
 html {
     --backdrop: rgb(255, 255, 255);
     --background: rgb(255, 255, 255);
     --text-color-normal: #000000;
-    --text-color-link: #44e;
     background-color: var(--backdrop);
     color: var(--text-color-normal);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -40,12 +9,13 @@ html {
 }
 
 html[data-theme='dark'] {
-    --backdrop: rgb(90, 90, 90);
+    --backdrop: rgb(73, 73, 73);
     --background: #000000;
     --text-color-normal: #ffffff;
-    --text-color-link: #77f;
 }
-
+a{
+  color: blue;
+}
 #main-content {
   display: flex;
   flex-direction: row;

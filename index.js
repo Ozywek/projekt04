@@ -102,9 +102,19 @@ app.post("/battle/:id/edit", auth.login_required, (req, res) => {
     res.status(404).send("Battle not found");
     return;
   }
-
-  const isAuthor = res.locals.user.id === battle.author_id;
-  const isAdmin = res.locals.user.is_admin === true;
+    const name = req.body.name?.trim();
+    const year = req.body.year?.trim();
+    const description = req.body.description?.trim();
+    if (
+        !name ||
+        !year ||
+        !description ||
+        isNaN(year)
+    ) {
+      res.status(400).send("Bad Request");
+    } else {
+      const isAuthor = res.locals.user.id === battle.author_id;
+      const isAdmin = res.locals.user.is_admin === true;
 
   if (!isAuthor && !isAdmin) {
     res.status(403).send("You can only edit your own battles");
@@ -119,17 +129,32 @@ app.post("/battle/:id/edit", auth.login_required, (req, res) => {
     battle.author_id
   );
   res.redirect(`/battle/${id}`);
+  }
 });
 
 app.post("/battle/new", auth.login_required, (req, res) => {
-  battles.Insert_Battle(
-    req.body.name,
-    req.body.year,
-    req.body.description,
-    res.locals.user.id
-  );
+    const name = req.body.name?.trim();
+    const year = req.body.year?.trim();
+    const description = req.body.description?.trim();
+    if (
+        !name ||
+        !year ||
+        !description ||
+        isNaN(year)
+    ) {
+      res.status(400).send("Bad Request");
+    } else {
+      battles.Insert_Battle(
+        req.body.name,
+        req.body.year,
+        req.body.description,
+        res.locals.user.id
+      );
+    }
   res.redirect("/");
+
 });
+
 
 app.post("/battle/:id/delete", auth.login_required, (req, res) => {
   const id = req.params.id;

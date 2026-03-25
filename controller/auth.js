@@ -33,7 +33,7 @@ export async function signup_post(req, res) {
     let user = await createUser(form.data["username"], form.data["password"]);
     if (user != null) {
       createSession(user.id, res);
-      res.redirect(nextUrl || "/");
+      res.redirect("/");
       return;
     } else {
       form.errors["username"] = "Użytkownik o podanej nazwie już istnieje";
@@ -80,20 +80,19 @@ export async function login_post(req, res) {
       form.errors["username"] = "Niepoprawna nazwa użytkownika lub hasło";
     } else {
       createSession(user_id, res);
-      res.redirect(nextUrl || "/");
+      res.redirect("/");
       return;
     }
   }
 
-  res.render("auth_login", { title: "Logowanie", form, nextUrl });
+  res.render("auth_login", { title: "Logowanie", form });
 }
 
 function logout(req, res) {
   if (res.locals.user != null) {
     deleteSession(res);
   }
-  let nextUrl = req.query.next;
-  res.redirect(nextUrl || "/");
+  res.redirect("/");
 }
 
 function login_required(req, res, next) {
