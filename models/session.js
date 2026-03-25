@@ -5,7 +5,7 @@ import { getUser } from "./user.js";
 const db_path = "./battles.db";
 const db = new DatabaseSync(db_path, { readBigInts: true });
 
-const SESSION_COOKIE = "__Host-fisz-id";
+const SESSION_COOKIE = "session_cookie";
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 // TODO(kleindan) no user model yet
@@ -60,6 +60,7 @@ function sessionHandler(req, res, next) {
   if (sessionId != null) session = db_ops.get_session.get(sessionId);
 
   if (session != null) {
+  
     res.locals.session = session;
     res.locals.user = session.user_id != null ? getUser(session.user_id) : null;
 

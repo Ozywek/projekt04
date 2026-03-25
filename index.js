@@ -1,13 +1,10 @@
-
 import express from 'express';
-import { validateHeaderValue } from 'node:http';  
 import cookieParser from "cookie-parser";
 import settings from "./models/settings.js";
 import battles from "./models/battles.js";
 import session from "./models/session.js";
 import auth from "./controller/auth.js";
-
-
+import user from "./models/user.js";
 
 const app = express();
 
@@ -15,24 +12,18 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cookieParser());
-
-
-
+app.use(session.sessionHandler);
 
 function settingsLocals(req, res, next) {
   res.locals.app = settings.getSettings(req);
   res.locals.page = req.path;
-  res.locals.user = req.user || null;
+  res.locals.user = res.locals.user || null;
   next();
 }
 app.use(settingsLocals);
-app.use(session.sessionHandler);
-// app.use(settings.settingsHandler);
 
 const settingsRouter = express.Router();
 settingsRouter.use("/toggle-theme", settings.themeToggle);
-
-
 settingsRouter.use("/accept-cookies", settings.acceptCookies);
 settingsRouter.use("/decline-cookies", settings.declineCookies);
 settingsRouter.use("/manage-cookies", settings.manageCookies);
@@ -46,23 +37,6 @@ authRouter.post("/login", auth.login_post);
 authRouter.get("/logout", auth.logout);
 app.use("/auth", authRouter);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function log_request(req, res, next) {
   console.log(`Request ${req.method} ${req.path}`);
   next();
@@ -75,22 +49,26 @@ function normalizeText(text) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
 }
+
 app.get("/", (req, res) => {
   res.render("main_page", {
     title: "Encyklopedia Bitew",
     battles: battles.Get_All_Battles_Limit(),
   });
-    
 });
-
 
 app.get("/battle/:id", (req, res) => {
   const id = req.params.id;
   const battle = battles.Get_Battle_By_Id(id);
   if (battle) {
+    const isAuthor = res.locals.user && res.locals.user.id === battle.author_id;
+    const isAdmin = res.locals.user && res.locals.user.is_admin === true;
+    const author = user.getUser(battle.author_id);
     res.render("article.ejs", {
       title: battle.name,
-      battle: battle
+      battle: battle,
+      author: author,
+      isAuthor: isAuthor || isAdmin
     });
   } else {
     res.status(404).send("Battle not found");
@@ -116,35 +94,60 @@ app.get('/search', (req, res) => {
   });
 });
 
-
-//edycja
 app.post("/battle/:id/edit", auth.login_required, (req, res) => {
   const id = req.params.id;
+  const battle = battles.Get_Battle_By_Id(id);
+
+  if (!battle) {
+    res.status(404).send("Battle not found");
+    return;
+  }
+
+  const isAuthor = res.locals.user.id === battle.author_id;
+  const isAdmin = res.locals.user.is_admin === true;
+
+  if (!isAuthor && !isAdmin) {
+    res.status(403).send("You can only edit your own battles");
+    return;
+  }
+
   battles.Update_Battle_By_Id(
     id,
     req.body.name,
     req.body.year,
-    req.body.description
+    req.body.description,
+    battle.author_id
   );
   res.redirect(`/battle/${id}`);
 });
 
-
-
-//nowy
 app.post("/battle/new", auth.login_required, (req, res) => {
-
-battles.Insert_Battle(
-  req.body.name,
-  req.body.year,
-  req.body.description  
-);
+  battles.Insert_Battle(
+    req.body.name,
+    req.body.year,
+    req.body.description,
+    res.locals.user.id
+  );
   res.redirect("/");
 });
 
-//usuń
 app.post("/battle/:id/delete", auth.login_required, (req, res) => {
   const id = req.params.id;
+  const battle = battles.Get_Battle_By_Id(id);
+
+  if (!battle) {
+    res.status(404).send("Battle not found");
+    return;
+  }
+
+  const isAuthor = res.locals.user.id === battle.author_id;
+  const isAdmin = res.locals.user.is_admin === true;
+
+  if (!isAuthor && !isAdmin) {
+    res.status(403).send("You can only delete your own battles");
+    return;
+  }
+
   battles.Delete_Battle_By_Id(id);
   res.redirect("/");
 });

@@ -5,68 +5,60 @@ const db = new DatabaseSync(db_path, { verbose: console.log });
 
 console.log("Connected to database at " + db_path);
 
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS battles (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      year INTEGER,
-      description TEXT
-    )
-  `);
+db.exec(`
+  CREATE TABLE IF NOT EXISTS battles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    year INTEGER,
+    description TEXT,
+    author_id INTEGER NOT NULL REFERENCES fc_users(user_id) ON DELETE NO ACTION
+  ) STRICT;
+`);
 
 let db_ops = {
   insert_battle: db.prepare(
-    `INSERT INTO battles (name, year, description)
-        VALUES (?, ?, ?) RETURNING id, name, year, description;`
-  ),
-
-  get_battles_by_name: db.prepare(
-    "SELECT id, name, year, description FROM battles WHERE name = ?;"
+    `INSERT INTO battles (name, year, description, author_id)
+        VALUES (?, ?, ?, ?) RETURNING id, name, year, description, author_id;`
   ),
 
   get_all_battles: db.prepare(
-    "SELECT id, name, year, description FROM battles;"
+    "SELECT id, name, year, description, author_id FROM battles;"
   ),
 
   get_update_battle_by_id: db.prepare(
-    "UPDATE battles SET name = ?, year = ?, description = ? WHERE id = ? RETURNING id, name, year, description;"
+    "UPDATE battles SET name = ?, year = ?, description = ?, author_id = ? WHERE id = ? RETURNING id, name, year, description, author_id;"
   ),
 
   get_all_battles_limit: db.prepare(
-    "SELECT id, name, year, description FROM battles ORDER BY id DESC LIMIT 3;"
+    "SELECT id, name, year, description, author_id FROM battles ORDER BY id DESC LIMIT 3;"
   ),
   get_battle_by_id: db.prepare(
-    "SELECT id, name, year, description FROM battles WHERE id = ?;"
+    "SELECT id, name, year, description, author_id FROM battles WHERE id = ?;"
   ),
   
   delete_battle_by_id: db.prepare(
     "DELETE FROM battles WHERE id = ?;"
-  )
+  ),
 }
 
-export function Update_Battle_By_Id(id, name, year, description) {
-  return db_ops.get_update_battle_by_id.run(name, year, description, id);
+export function Update_Battle_By_Id(id, name, year, description, author_id) {
+  return db_ops.get_update_battle_by_id.run(name, year, description, author_id, id);
 }
-
-export function Insert_Battle(name, year, description) {
-  console.log(name, year, description);
-  return db_ops.insert_battle.run(name, year, description);
+export function Insert_Battle(name, year, description, author_id) {
+  console.log(name, year, description, author_id);
+  return db_ops.insert_battle.run(name, year, description, author_id);
 }
 
 export function Get_All_Battles() {
   return db_ops.get_all_battles.all();
 }
-
 export function Get_Battle_By_Id(id) {
   return db_ops.get_battle_by_id.get(id);
 }
 
+
 export function Get_All_Battles_Limit() {
   return db_ops.get_all_battles_limit.all();
-}
- 
-export function Get_Battles_By_Name(name) {
-  return db_ops.get_battles_by_name.all(name);
 }
 
 export function Delete_Battle_By_Id(id) {
@@ -78,7 +70,6 @@ export default {
   Get_All_Battles,
   Get_Battle_By_Id,
   Get_All_Battles_Limit,
-  Get_Battles_By_Name,
   Update_Battle_By_Id,
   Delete_Battle_By_Id
 };

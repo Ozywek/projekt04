@@ -1,3 +1,4 @@
+import user from "../models/user.js";
 import battles from "../models/battles.js";
 const card_categories = {
   "bitwa1": {
@@ -165,10 +166,30 @@ const card_categories = {
 
 console.log("Populating db...");
 
-Object.entries(card_categories).forEach(([id, data]) => { 
+// Create admin user first
+let admin = await user.createUser("admin", "changeme");
+if (admin) {
+  let errMsg = user.addAttribute(admin.id, "is_admin", true);
+  if (errMsg) {
+    console.error(errMsg);
+  }
+  console.log("Admin user created");
+}
+
+// Create student user
+let student = await user.createUser("student", "changeme");
+if (student) {
+  console.log("Student user created");
+}
+
+// Now insert battles with admin as author
+Object.entries(card_categories).forEach(([id, data]) => {
+  console.log(`Inserting battle: ${data.name}`);
+  
   battles.Insert_Battle(
     data.name,
     data.year,
-    data.description
+    data.description,
+    admin.id
   );
 });
