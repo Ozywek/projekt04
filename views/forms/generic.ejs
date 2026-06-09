@@ -6,7 +6,7 @@
       <input 
         type="<%- field.type %>"
         name="<%- field.name %>"
-        id="field_<%- field.type %>"
+        id="field_<%- field.name %>"
         <% if (field.required) { %>
         required
         <% } %>
@@ -16,11 +16,11 @@
         <% if (field.max_length) { %>
         maxlength="<%- field.max_length %>"
         <% } %>
-        <% if (data[field.name]) { %>
+        <% if (data && data[field.name]) { %>
         value="<%= data[field.name] %>"
         <% } %>
       />
-      <% if (errors[field.name]) { %>
+      <% if (errors && errors[field.name]) { %>
         <span class="form-error"><%= errors[field.name] %></span>
       <% } %>
     </div>
@@ -28,6 +28,8 @@
   <% }) %>
   <div class="form-row">
     <label></label>
-    <button class="submit-button"><%=  locals.submit_text || "Wyślij" %></button>
+    <div class="form-input">
+      <button class="submit-button" type="submit"><%=  locals.submit_text || "Wyślij" %></button>
+    </div>
   </div>
 </form>

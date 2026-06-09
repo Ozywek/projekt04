@@ -12,12 +12,12 @@ const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 // remember to add Foreign Key relations later
 db.exec(`
   CREATE TABLE IF NOT EXISTS fc_session (
-    id              INTEGER PRIMARY KEY,
-    user_id         INTEGER,
-    created_at      INTEGER
+  id              INTEGER PRIMARY KEY,
+  user_id         INTEGER,
+  created_at      INTEGER,
+  FOREIGN KEY (user_id) REFERENCES fc_users(user_id)
   ) STRICT;
   `);
-
 const db_ops = {
   create_session: db.prepare(
     "INSERT INTO fc_session (id, user_id, created_at) VALUES (?, ?, ?) RETURNING id, user_id, created_at;",

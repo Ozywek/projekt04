@@ -2,9 +2,9 @@ import express from 'express';
 import cookieParser from "cookie-parser";
 import settings from "./models/settings.js";
 import battles from "./models/battles.js";
+import user from "./models/user.js";
 import session from "./models/session.js";
 import auth from "./controller/auth.js";
-import user from "./models/user.js";
 
 const app = express();
 
@@ -177,6 +177,6 @@ app.post("/battle/:id/delete", auth.login_required, (req, res) => {
   res.redirect("/");
 });
 
-app.listen(3000, () => {
+app.listen(8000, () => {
   console.log('Serwer działa');
 });

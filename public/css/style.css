@@ -1,24 +1,116 @@
-html {
-    --backdrop: rgb(255, 255, 255);
-    --background: rgb(255, 255, 255);
-    --text-color-normal: #000000;
-    background-color: var(--backdrop);
-    color: var(--text-color-normal);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 11pt;
+:root{
+  --bg: #ffffff;
+  --text: #222222;
+  --muted: #666666;
+  --accent: #0b66c3;
+  --header-bg: #f6f8fa;
+  --card-bg: #ffffff;
+  --cookie-bg: rgba(0,0,0,0.05);
+  --font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html[data-theme='dark'] {
-    --backdrop: rgb(73, 73, 73);
-    --background: #000000;
-    --text-color-normal: #ffffff;
+html[data-theme='dark']{
+  --bg: #0f1720;
+  --text: #e6eef8;
+  --muted: #9fb0c8;
+  --accent: #79b8ff;
+  --header-bg: #0b1116;
+  --card-bg: #07101a;
+  --cookie-bg: rgba(255,255,255,0.03);
 }
-a{
-  color: blue;
+
+*{ box-sizing: border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  font-family: var(--font-stack);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
 }
-#main-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: left;
+
+header{
+  background:var(--header-bg);
+  padding:12px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(0,0,0,0.06);
 }
+
+nav a{ color:var(--accent); text-decoration:none; font-weight:600 }
+nav a:hover{ text-decoration:underline }
+
+.controls{ display:flex; gap:12px; align-items:center }
+
+
+h1{ margin:12px 0 18px }
+
+.article-card{
+  background:var(--card-bg);
+  border-radius:8px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  border:1px solid rgba(0,0,0,0.04);
+}
+.article-card h2{ margin:0 0 6px }
+.article-meta{ color:var(--muted); font-size:0.9rem }
+
+form{ display:block; margin:12px 0 }
+input[type=text], textarea, input[type=number]{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid rgba(0,0,0,0.08);
+  background:transparent;
+  color:var(--text);
+}
+textarea{ min-height:120px }
+button, .btn{ background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer }
+button.secondary, .btn.secondary{ background:transparent; color:var(--accent); border:1px solid rgba(0,0,0,0.06) }
+
+.form{ display:block; background:var(--card-bg); padding:12px; border-radius:8px; border:1px solid rgba(0,0,0,0.04); }
+.form-row{ display:flex; gap:12px; align-items:flex-start; margin-bottom:10px }
+.form-row label{ min-width:120px; color:var(--muted); font-weight:600 }
+.form-input{ flex:1 }
+.form-error{ color:#b00020; font-size:0.9rem; display:block; margin-top:6px }
+.submit-button{ background:var(--accent); color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer }
+
+#main-content{ display:block }
+.main-section{ margin-bottom:18px }
+.recent-list{ background:var(--card-bg); padding:12px; border-radius:8px; border:1px solid rgba(0,0,0,0.04) }
+.recent-list ul{ list-style:none; padding-left:0 }
+.recent-list li{ padding:6px 0; border-bottom:1px dashed rgba(0,0,0,0.03) }
+.recent-list li:last-child{ border-bottom:none }
+
+.cookie-container{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  background:var(--cookie-bg);
+  color:var(--text);
+  padding:12px 14px;
+  border-radius:10px;
+  max-width:360px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12);
+  z-index:9999;
+  border:1px solid rgba(0,0,0,0.06);
+}
+.cookie-container p{ margin:6px 0; color:var(--muted) }
+.cookie-buttons{ display:flex; gap:8px; margin-top:8px }
+.cookieButton{ display:inline-block; padding:8px 10px; border-radius:6px; text-decoration:none; color:var(--text); background:transparent; border:1px solid rgba(0,0,0,0.08) }
+#acceptButton{ background:var(--accent); color:white; border:none }
+#declineButton{ background:transparent; color:var(--text) }
+
+.custom-break{ display:block; height:8px }
+
+@media (max-width:600px){
+  header{ padding:10px }
+  .cookie-container{ left:8px; right:8px; max-width:unset }
+}
+
+a{ color:var(--accent) }
+
+footer{ padding:18px; text-align:center; color:var(--muted) }

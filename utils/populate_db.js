@@ -1,5 +1,21 @@
-import user from "../models/user.js";
-import battles from "../models/battles.js";
+import fs from "node:fs";
+
+// Remove existing DB so schema is re-created in correct order
+try {
+  if (fs.existsSync("./battles.db")) {
+    fs.unlinkSync("./battles.db");
+    console.log("Removed existing battles.db to recreate schema");
+  }
+} catch (e) {
+  console.warn("Could not remove battles.db:", e.message);
+}
+
+// Import models dynamically after DB removal so their CREATE TABLE runs in desired order
+const sessionMod = await import("../models/session.js");
+const userMod = await import("../models/user.js");
+const battlesMod = await import("../models/battles.js");
+const user = userMod.default;
+const battles = battlesMod.default;
 const card_categories = {
   "bitwa1": {
     name: "Bitwa pod Azincourt",
@@ -166,7 +182,7 @@ const card_categories = {
 
 console.log("Populating db...");
 
-// Create admin user first
+// tworzenie konta admina
 let admin = await user.createUser("admin", "changeme");
 if (admin) {
   let errMsg = user.addAttribute(admin.id, "is_admin", true);
@@ -176,16 +192,16 @@ if (admin) {
   console.log("Admin user created");
 }
 
-// Create student user
+// stworzenie studenta
 let student = await user.createUser("student", "changeme");
 if (student) {
-  console.log("Student user created");
+  console.log("Stworzono użytkownika studenta");
 }
 
-// Now insert battles with admin as author
+// wpisywanie bitew jako admin
 Object.entries(card_categories).forEach(([id, data]) => {
-  console.log(`Inserting battle: ${data.name}`);
-  
+  console.log(`Wpisywanie bitwy: ${data.name}`);
+
   battles.Insert_Battle(
     data.name,
     data.year,

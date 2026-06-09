@@ -1,17 +1,34 @@
-<div class="new-article-form">
-  <h3>Dodaj nową bitwę</h3>
-  <form method="POST" action="/battle/new">
+<div class="main-section">
+  <div class="form">
+    <h3>Dodaj nową bitwę</h3>
+    <form method="POST" action="/battle/new">
+      <div class="form-row">
+        <label for="name">Nazwa bitwy</label>
+        <div class="form-input">
+          <input type="text" id="name" name="name" required />
+        </div>
+      </div>
 
-  <label>Nazwa bitwy:</label><br>
-  <input type="text" name="name" required><br><br>
+      <div class="form-row">
+        <label for="year">Rok</label>
+        <div class="form-input">
+          <input type="number" id="year" name="year" required />
+        </div>
+      </div>
 
-  <label>Rok:</label><br>
-  <input type="number" name="year" required><br><br>
+      <div class="form-row">
+        <label for="description">Opis</label>
+        <div class="form-input">
+          <textarea id="description" name="description" required></textarea>
+        </div>
+      </div>
 
-  <label>Opis:</label><br>
-  <textarea name="description" required></textarea><br><br>
-
-  <button type="submit">Dodaj bitwę</button>
-
-</form>
-</div>  
+      <div class="form-row">
+        <label></label>
+        <div class="form-input">
+          <button class="submit-button" type="submit">Dodaj bitwę</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

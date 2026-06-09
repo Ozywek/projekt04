@@ -16,6 +16,15 @@ const HASH_PARAMS = {
 const db_path = "./battles.db";
 const db = new DatabaseSync(db_path);
 
+// Defensive: ensure session table exists in case session model hasn't run yet
+db.exec(`
+  CREATE TABLE IF NOT EXISTS fc_session (
+    id              INTEGER PRIMARY KEY,
+    user_id         INTEGER,
+    created_at      INTEGER
+  ) STRICT;
+  `);
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS fc_users (
     user_id         INTEGER PRIMARY KEY,
@@ -25,6 +34,7 @@ db.exec(`
     created_at      INTEGER
   ) STRICT;
   `);
+
 
 const db_ops = {
   create_user: db.prepare(
